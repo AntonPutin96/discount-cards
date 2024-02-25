@@ -36,6 +36,7 @@
     "prefer-regex-literals": "off",
     "implicit-arrow-linebreak": "off",
     "react/function-component-definition": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "linebreak-style": ["error", "windows"]
   }
 }
