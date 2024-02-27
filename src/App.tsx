@@ -1,10 +1,14 @@
 import React, { ChangeEvent, useState } from 'react';
+
 import Card from './components/Card';
 import BwipWrapper from './components/BwipWrapper';
+import useIndexedDB from './hooks/useIndexedDB';
+
+const LS_KEY = 'state';
 
 function App() {
   const [code, setCode] = useState('0123456789');
-  const [text, setText] = useState<string | null>(null);
+  const [state, setState] = useIndexedDB<Array<string>>(LS_KEY, []);
   document.title = 'Скидочные карты';
 
   const codeChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -12,7 +16,9 @@ function App() {
   };
 
   const btnClickHandler = () => {
-    setText(code);
+    if (!state?.includes(code.trim())) {
+      setState((prevState) => [...(prevState ?? []), code.trim()]);
+    }
   };
 
   return (
@@ -24,7 +30,9 @@ function App() {
       <button onClick={btnClickHandler} type='button'>
         Получить штрих-код
       </button>
-      {text && <BwipWrapper bcId='code128' text={text} />}
+      {state?.map((text) => (
+        <BwipWrapper key={text} bcId='code128' text={text} />
+      ))}
     </div>
   );
 }
