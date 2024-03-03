@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
+// TODO: перенести сюда часть функционала из App.tsx
 
 type ModalProps = {
   open: boolean;
