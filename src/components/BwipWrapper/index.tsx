@@ -7,10 +7,15 @@ import classes from './bwipWrapper.module.css';
 type BwipWrapperProps = {
   bcId: BcIdType;
   text: string;
+  onClick?: (text: string) => void;
 };
 
-const BwipWrapper = ({ bcId, text }: BwipWrapperProps) => {
+const BwipWrapper = ({ bcId, text, onClick }: BwipWrapperProps) => {
   const ref = useRef<HTMLDivElement>(null);
+
+  const clickHandler = () => {
+    onClick?.(text);
+  };
 
   useEffect(() => {
     const svg = BwipJs.toSVG({
@@ -27,7 +32,14 @@ const BwipWrapper = ({ bcId, text }: BwipWrapperProps) => {
     }
   }, [bcId, text]);
 
-  return <div className={classes.bwip} ref={ref} />;
+  return (
+    <div
+      className={classes.bwip}
+      ref={ref}
+      onClick={clickHandler}
+      role='none'
+    />
+  );
 };
 
 export default BwipWrapper;
