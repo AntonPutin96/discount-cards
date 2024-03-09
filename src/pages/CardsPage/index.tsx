@@ -1,65 +1,49 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
+import React, { useRef, useState } from 'react';
 import useIndexedDB from '../../hooks/useIndexedDB';
 import Card from '../../components/Card';
 import BwipWrapper from '../../components/BwipWrapper';
+import Modal from '../../components/Modal';
+import classes from './cardsPage.module.css';
 
 const LS_KEY = 'state';
 
+type CardType = {
+  title: string;
+  text: string;
+};
+
+const defaultCards = [
+  { title: 'Ситилинк', text: '0123456789' },
+  { title: 'Магнит', text: '9876543210' }
+];
+
 const CardsPage = () => {
-  const [code, setCode] = useState('0123456789');
-  const [state, setState] = useIndexedDB<Array<string>>(LS_KEY, []);
+  const [state] = useIndexedDB<Array<CardType>>(LS_KEY, defaultCards);
   const [openModal, setOpenModal] = useState(false);
   const activeCode = useRef<string | null>(null);
   document.title = 'Скидочные карты';
 
-  const codeChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setCode(e.target.value);
-  };
+  const closeModalHandler = () => setOpenModal(false);
 
-  const btnClickHandler = () => {
-    if (!state?.includes(code.trim())) {
-      setState((prevState) => [...(prevState ?? []), code.trim()]);
-    }
-  };
-
-  const clickBwipHandler = (text: string) => {
+  const cardClickHandler = (text: string) => {
     activeCode.current = text;
     setOpenModal(true);
   };
 
-  const closeModalHandler = () => setOpenModal(false);
-
   return (
     <>
-      <div>
-        <div>Скидочные карты</div>
-        <Card title='Скидка #1' />
-        <hr />
-        <input value={code} onChange={codeChangeHandler} />
-        <button onClick={btnClickHandler} type='button'>
-          Получить штрих-код
-        </button>
-        {state?.map((text) => (
-          <BwipWrapper
-            key={text}
-            bcId='code128'
-            text={text}
-            onClick={clickBwipHandler}
-          />
+      <div className={classes.wrapper}>
+        {state?.map(({ title, text }) => (
+          <Card title={title} onClick={() => cardClickHandler(text)} />
         ))}
       </div>
-      <Dialog open={openModal} onClose={closeModalHandler}>
+      <Modal open={openModal} onClose={closeModalHandler}>
         {activeCode.current ? (
           <BwipWrapper bcId='code128' text={activeCode.current} />
         ) : (
           <div>Не удалось отобразить код</div>
         )}
-        <Button onClick={closeModalHandler} variant='outlined'>
-          Закрыть
-        </Button>
-      </Dialog>
+      </Modal>
     </>
   );
 };
