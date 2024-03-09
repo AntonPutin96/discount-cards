@@ -1,13 +1,13 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
-import Card from './components/Card';
-import BwipWrapper from './components/BwipWrapper';
-import useIndexedDB from './hooks/useIndexedDB';
+import useIndexedDB from '../../hooks/useIndexedDB';
+import Card from '../../components/Card';
+import BwipWrapper from '../../components/BwipWrapper';
 
 const LS_KEY = 'state';
 
-function App() {
+const CardsPage = () => {
   const [code, setCode] = useState('0123456789');
   const [state, setState] = useIndexedDB<Array<string>>(LS_KEY, []);
   const [openModal, setOpenModal] = useState(false);
@@ -62,6 +62,6 @@ function App() {
       </Dialog>
     </>
   );
-}
+};
 
-export default App;
+export default CardsPage;
