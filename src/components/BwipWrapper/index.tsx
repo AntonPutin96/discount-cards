@@ -4,18 +4,13 @@ import BwipJs from 'bwip-js';
 import { BcIdType } from './types';
 import classes from './bwipWrapper.module.css';
 
-type BwipWrapperProps = {
+interface BwipWrapperProps {
   bcId: BcIdType;
   text: string;
-  onClick?: (text: string) => void;
-};
+}
 
-const BwipWrapper = ({ bcId, text, onClick }: BwipWrapperProps) => {
+const BwipWrapper = ({ bcId, text }: BwipWrapperProps) => {
   const ref = useRef<HTMLDivElement>(null);
-
-  const clickHandler = () => {
-    onClick?.(text);
-  };
 
   useEffect(() => {
     const svg = BwipJs.toSVG({
@@ -24,7 +19,7 @@ const BwipWrapper = ({ bcId, text, onClick }: BwipWrapperProps) => {
       height: 12, // Bar height, in millimeters
       includetext: true, // Show human-readable text
       textxalign: 'center', // Always good to set this
-      textcolor: 'ff0000', // Red text
+      textcolor: '000', // Red text
       scale: 1
     });
     if (ref.current) {
@@ -32,14 +27,7 @@ const BwipWrapper = ({ bcId, text, onClick }: BwipWrapperProps) => {
     }
   }, [bcId, text]);
 
-  return (
-    <div
-      className={classes.bwip}
-      ref={ref}
-      onClick={clickHandler}
-      role='none'
-    />
-  );
+  return <div className={classes.bwip} ref={ref} role='none' />;
 };
 
 export default BwipWrapper;

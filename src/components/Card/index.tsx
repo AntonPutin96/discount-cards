@@ -1,14 +1,37 @@
 import React from 'react';
-import classes from './card.module.css';
+import {
+  ButtonBase,
+  Card as CardMui,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography
+} from '@mui/material';
+import ShopImage from '../../images/shop_img_345_140.jpg';
 
-type CardProps = {
+interface CardProps {
   title: string;
-};
+  onClick?: () => void;
+}
 
-const Card = ({ title }: CardProps) => (
-  <div className={classes.wrapper}>
-    <div>{`Title: ${title}`}</div>
-  </div>
+const Card = ({ title, onClick }: CardProps) => (
+  <CardMui sx={{ maxWidth: 345 }}>
+    <ButtonBase onClick={onClick}>
+      <CardActionArea>
+        <CardMedia
+          component='img'
+          height='140'
+          image={ShopImage}
+          alt='green iguana'
+        />
+        <CardContent>
+          <Typography gutterBottom variant='h5' component='div'>
+            {title}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </ButtonBase>
+  </CardMui>
 );
 
 export default Card;
