@@ -1,26 +1,30 @@
+.cardPageWrapper {
+    padding: 24px;
+}
+
 .сardPage {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
 .title {
-  display: flex;
-  flex-direction: column;
-  float: left;
-  padding: 0 1rem;
-  width: auto;
-  height: auto;
+    display: flex;
+    flex-direction: column;
+    float: left;
+    padding: 0 1rem;
+    width: auto;
+    height: auto;
 }
 
 .add {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 1rem;
 }

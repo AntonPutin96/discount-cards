@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -6,17 +6,33 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 import classes from './newCard.module.css';
+import useIndexedDB from '../../hooks/useIndexedDB';
+import { DEFAULT_CARDS, LS_KEY, SHOPS } from '../../constants';
+import { CardType } from '../../types';
 
-export default function BasicSelect() {
-  const [code, setCode] = React.useState('');
+const NewCardAddPage = () => {
+  const [shopId, setShopId] = useState(SHOPS[0].id);
+  const [code, setCode] = useState('12345');
+  const [, setState] = useIndexedDB<Array<CardType>>(LS_KEY, DEFAULT_CARDS);
+  const navigate = useNavigate();
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setCode(event.target.value as string);
+  const selectChangeHandler = (e: SelectChangeEvent) => {
+    setShopId(e.target.value);
+  };
+
+  const inputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setCode(e.target.value);
+  };
+
+  const addClickHandler = () => {
+    setState((prevState) => [...prevState, { shopId, code }]);
+    setTimeout(() => navigate('/'), 0);
   };
 
   return (
-    <div>
+    <div className={classes.cardPageWrapper}>
       <div className={classes.cardPage}>
         <div className={classes.title}>
           <h4>Название магазина:</h4>
@@ -31,30 +47,32 @@ export default function BasicSelect() {
               <Select
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
-                value={code}
+                value={shopId}
                 label='Карта магазина'
-                onChange={handleChange}
+                onChange={selectChangeHandler}
               >
-                <MenuItem value='code128'>Новый</MenuItem>
-                <MenuItem value='code128'>Citilink</MenuItem>
-                <MenuItem value='code01'>Twenty</MenuItem>
-                <MenuItem value='code02'>Thirty</MenuItem>
+                {SHOPS.map(({ id, name }) => (
+                  <MenuItem key={id} value={id}>
+                    {name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
           <Box sx={{ m: 1, minWidth: 300 }}>
             <FormControl fullWidth>
-              <Input />
+              <Input value={code} onChange={inputChangeHandler} />
             </FormControl>
           </Box>
         </div>
       </div>
       <div className={classes.content}>
-        <Button variant='outlined'>Добавить</Button>
-        <h6>{code}</h6>
+        <Button variant='outlined' onClick={addClickHandler}>
+          Добавить
+        </Button>
       </div>
     </div>
   );
-}
+};
 
-// export default NewCardAddPage;
+export default NewCardAddPage;

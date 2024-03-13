@@ -1,5 +1,5 @@
-import { useState, useEffect, SetStateAction, useRef } from 'react';
-import { set, get } from 'idb-keyval';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
+import { get, set } from 'idb-keyval';
 
 const useIndexedDB = <T>(
   key: string,
