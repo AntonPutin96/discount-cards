@@ -4,37 +4,32 @@ import Card from '../../components/Card';
 import BwipWrapper from '../../components/BwipWrapper';
 import Modal from '../../components/Modal';
 import classes from './cardsPage.module.css';
-
-const LS_KEY = 'state';
-
-type CardType = {
-  title: string;
-  text: string;
-};
-
-const defaultCards = [
-  { title: 'Ситилинк', text: '0123456789' },
-  { title: 'Магнит', text: '9876543210' }
-];
+import { DEFAULT_CARDS, LS_KEY } from '../../constants';
+import { CardType } from '../../types';
+import { getShopNameById } from '../../logic';
 
 const CardsPage = () => {
-  const [state] = useIndexedDB<Array<CardType>>(LS_KEY, defaultCards);
+  const [state] = useIndexedDB<Array<CardType>>(LS_KEY, DEFAULT_CARDS);
   const [openModal, setOpenModal] = useState(false);
   const activeCode = useRef<string | null>(null);
   document.title = 'Скидочные карты';
 
   const closeModalHandler = () => setOpenModal(false);
 
-  const cardClickHandler = (text: string) => {
-    activeCode.current = text;
+  const cardClickHandler = (code: string) => {
+    activeCode.current = code;
     setOpenModal(true);
   };
 
   return (
     <>
       <div className={classes.wrapper}>
-        {state?.map(({ title, text }) => (
-          <Card title={title} onClick={() => cardClickHandler(text)} />
+        {state?.map(({ shopId, code }) => (
+          <Card
+            key={`${shopId}_${code}`}
+            title={getShopNameById(shopId)}
+            onClick={() => cardClickHandler(code)}
+          />
         ))}
       </div>
       <Modal open={openModal} onClose={closeModalHandler}>
