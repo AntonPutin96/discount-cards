@@ -7,6 +7,7 @@ import {
   Typography
 } from '@mui/material';
 import { AddCard } from '@mui/icons-material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const AppBar = () => {
   const navigate = useNavigate();
@@ -24,6 +25,16 @@ const AppBar = () => {
           Discount Cards
         </Typography>
         <div>
+          <NavLink to='/favorites'>
+            <IconButton
+              size='large'
+              aria-label='Избранные карточки'
+              aria-controls='menu-appbar'
+              color='inherit'
+            >
+              <FavoriteIcon />
+            </IconButton>
+          </NavLink>
           <NavLink to='/addNewCard'>
             <IconButton
               size='large'

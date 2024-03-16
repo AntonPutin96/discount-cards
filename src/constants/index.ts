@@ -7,6 +7,6 @@ export const SHOPS = [
 ];
 
 export const DEFAULT_CARDS = [
-  { shopId: 'shop_1', code: '0123456789' },
-  { shopId: 'shop_2', code: '9876543210' }
+  { shopId: 'shop_1', code: '0123456789', isFavorite: true },
+  { shopId: 'shop_2', code: '9876543210', isFavorite: false }
 ];
