@@ -1,4 +1,5 @@
 export const LS_KEY = 'state';
+export const LS_FAVORITES_KEY = 'favs_state';
 
 export const SHOPS = [
   { id: 'shop_1', name: 'Citilink', code: 'code128' },
@@ -7,6 +8,6 @@ export const SHOPS = [
 ];
 
 export const DEFAULT_CARDS = [
-  { shopId: 'shop_1', code: '0123456789', isFavorite: true },
-  { shopId: 'shop_2', code: '9876543210', isFavorite: false }
+  { id: 1, shopId: 'shop_1', code: '0123456789' },
+  { id: 2, shopId: 'shop_2', code: '9876543210' }
 ];

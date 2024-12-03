@@ -21,32 +21,18 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "react"
-  ],
+  "plugins": ["@typescript-eslint", "react"],
   "rules": {
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     ],
-    "jsx-quotes": [
-      "error",
-      "prefer-single"
-    ],
+    "jsx-quotes": ["error", "prefer-single"],
     "operator-linebreak": "off",
     "@typescript-eslint/comma-dangle": "off",
-    "@typescript-eslint/no-use-before-define": [
-      "off",
-      "typedefs"
-    ],
+    "@typescript-eslint/no-use-before-define": ["off", "typedefs"],
     "object-curly-newline": "off",
     "no-underscore-dangle": "off",
     "prefer-regex-literals": "off",
@@ -58,6 +44,7 @@
     "jsx-a11y/click-events-have-key-events": "off",
     "import/prefer-default-export": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "no-debugger": "warn"
+    "no-debugger": "warn",
+    "@typescript-eslint/indent": "off"
   }
 }

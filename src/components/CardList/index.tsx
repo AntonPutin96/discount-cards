@@ -1,30 +1,29 @@
-import React, { useMemo, useRef, useState } from 'react';
-import useIndexedDB from '../../hooks/useIndexedDB';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Card from '../Card';
 import BwipWrapper from '../BwipWrapper';
 import Modal from '../Modal';
 import classes from './cardList.module.css';
-import { DEFAULT_CARDS, LS_KEY } from '../../constants';
-import { CardType } from '../../types';
-import { getFavoritesCard, getShopNameById, isEqualCard } from '../../logic';
+import { getShopNameById } from '../../logic';
+import { getAllCards } from '../../selectors/getAllCards';
+import { useActions } from '../../hooks/useActions';
+import { LS_KEY } from '../../constants';
 
 interface CardListProps {
   viewFavorites?: boolean;
 }
 
 const CardList = ({ viewFavorites = false }: CardListProps) => {
-  const [state, setState] = useIndexedDB<Array<CardType>>(
-    LS_KEY,
-    DEFAULT_CARDS
-  );
+  const cards = useSelector(getAllCards(viewFavorites));
   const [openModal, setOpenModal] = useState(false);
   const activeCode = useRef<string | null>(null);
   document.title = 'Скидочные карты';
+  const { getCardsFromIndexedDB, getFavoritesFromIndexedDB } = useActions();
 
-  const viewedCards = useMemo(
-    () => (viewFavorites ? getFavoritesCard(state) : state),
-    [state, viewFavorites]
-  );
+  useEffect(() => {
+    getCardsFromIndexedDB(LS_KEY);
+    getFavoritesFromIndexedDB();
+  }, []);
 
   const closeModalHandler = () => setOpenModal(false);
 
@@ -33,25 +32,19 @@ const CardList = ({ viewFavorites = false }: CardListProps) => {
     setOpenModal(true);
   };
 
-  const toggleFavoriteHandler = (card: CardType) => {
-    setState((prevState) =>
-      prevState.map((curCard) =>
-        (isEqualCard(card, curCard)
-          ? { ...curCard, isFavorite: !curCard.isFavorite }
-          : curCard)));
-  };
+  if (!cards) {
+    return null;
+  }
 
   return (
     <>
       <div className={classes.wrapper}>
-        {viewedCards?.map(({ shopId, code, isFavorite }) => (
+        {cards?.map(({ id, shopId, code }) => (
           <Card
-            key={`${shopId}_${code}`}
+            key={`${id}`}
+            id={id}
             title={getShopNameById(shopId)}
             onClick={() => cardClickHandler(code)}
-            isFavorite={Boolean(isFavorite)}
-            toggleFavorite={() =>
-              toggleFavoriteHandler({ shopId, code, isFavorite })}
           />
         ))}
       </div>
