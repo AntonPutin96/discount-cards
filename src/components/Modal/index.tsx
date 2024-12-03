@@ -1,21 +1,27 @@
 import React, { ReactNode } from 'react';
-import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
-// TODO: перенести сюда часть функционала из App.tsx
+import Dialog from '@mui/material/Dialog';
+import classes from './modal.module.css';
 
-type ModalProps = {
+interface ModalProps {
   open: boolean;
   onClose: () => void;
   children?: ReactNode;
-};
+}
 const Modal = ({ children, open, onClose }: ModalProps) => (
-  <Backdrop
+  <Dialog
     open={open}
-    sx={{ color: 'white', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    onClose={onClose}
+    fullScreen
+    classes={{ paper: classes.paper }}
   >
-    {children}
-    <Button onClick={onClose}>Закрыть</Button>
-  </Backdrop>
+    <div className={classes.content}>
+      {children}
+      <Button onClick={onClose} variant='outlined'>
+        Закрыть
+      </Button>
+    </div>
+  </Dialog>
 );
 
 export default Modal;
