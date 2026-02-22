@@ -26,54 +26,54 @@ run:
     PORT: 8080
 
   # Ограничения ресурсов
-  resources:
-    cpu:
-      limit: 500m
-      request: 250m
-    memory:
-      limit: 256Mi
-      request: 128Mi
+  # resources:
+  #   cpu:
+  #     limit: 500m
+  #     request: 250m
+  #   memory:
+  #     limit: 256Mi
+  #     request: 128Mi
 
-  # Безопасность
-  security:
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 1000
-    capabilities:
-      drop:
-        - ALL
+  # # Безопасность
+  # security:
+  #   readOnlyRootFilesystem: true
+  #   runAsNonRoot: true
+  #   runAsUser: 1000
+  #   capabilities:
+  #     drop:
+  #       - ALL
 
-  # Мониторинг и логирование
-  monitoring:
-    metrics:
-      enabled: true
-      port: 9090
+  # # Мониторинг и логирование
+  # monitoring:
+  #   metrics:
+  #     enabled: true
+  #     port: 9090
 
-  # Логирование
-  logging:
-    format: json
-    level: info
+  # # Логирование
+  # logging:
+  #   format: json
+  #   level: info
 
-  # Настройки контейнера
-  container:
-    image: node:18-alpine
-    workingDir: /app
+  # # Настройки контейнера
+  # container:
+  #   image: node:18-alpine
+  #   workingDir: /app
 
-  # Масштабирование
-  scaling:
-    replicas: 1
-    maxReplicas: 3
-    minReplicas: 1
+  # # Масштабирование
+  # scaling:
+  #   replicas: 1
+  #   maxReplicas: 3
+  #   minReplicas: 1
 
-  # Обработка зависимостей
-  dependencies:
-    installCommand: npm ci --only=production
-    cacheDir: /app/.npm-cache
+  # # Обработка зависимостей
+  # dependencies:
+  #   installCommand: npm ci --only=production
+  #   cacheDir: /app/.npm-cache
 
   # Дополнительные настройки
-  healthCheck:
-    path: /
-    port: 8080
-    interval: 30s
-    timeout: 5s
-    retries: 3
+  # healthCheck:
+  #   path: /
+  #   port: 8080
+  #   interval: 30s
+  #   timeout: 5s
+  #   retries: 3
