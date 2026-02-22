@@ -1,5 +1,3 @@
-# Конфигурация для развертывания React-приложения на Cloud.Amvera.ru
-
 meta:
   environment: node
   toolchain:
@@ -8,9 +6,7 @@ meta:
 
 build:
   skip: false
-  additionalCommands:
-    - npm ci --only=production
-    - npm run build
+  additionalCommands: npm run build
   artifacts:
     '*': /
 run:
@@ -20,74 +16,3 @@ run:
   command: serve -s build
   persistenceMount: /data
   containerPort: '80'
-# build:
-#   additionalCommands:
-#     - npm ci --only=production
-#     - npm run build
-
-# run:
-#   command: serve -s build
-#   containerPort: 8080
-
-#   # Настройки для статического хостинга
-#   static:
-#     directory: build
-#     index: index.html
-
-#   # Оптимизация переменных окружения
-#   env:
-#     NODE_ENV: production
-#     PORT: 8080
-
-# Ограничения ресурсов
-# resources:
-#   cpu:
-#     limit: 500m
-#     request: 250m
-#   memory:
-#     limit: 256Mi
-#     request: 128Mi
-
-# # Безопасность
-# security:
-#   readOnlyRootFilesystem: true
-#   runAsNonRoot: true
-#   runAsUser: 1000
-#   capabilities:
-#     drop:
-#       - ALL
-
-# # Мониторинг и логирование
-# monitoring:
-#   metrics:
-#     enabled: true
-#     port: 9090
-
-# # Логирование
-# logging:
-#   format: json
-#   level: info
-
-# # Настройки контейнера
-# container:
-#   image: node:18-alpine
-#   workingDir: /app
-
-# # Масштабирование
-# scaling:
-#   replicas: 1
-#   maxReplicas: 3
-#   minReplicas: 1
-
-# # Обработка зависимостей
-# dependencies:
-#   installCommand: npm ci --only=production
-#   cacheDir: /app/.npm-cache
-
-# Дополнительные настройки
-# healthCheck:
-#   path: /
-#   port: 8080
-#   interval: 30s
-#   timeout: 5s
-#   retries: 3
