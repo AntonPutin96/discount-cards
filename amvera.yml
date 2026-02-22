@@ -15,4 +15,4 @@ run:
   nodeArguments: null
   command: npm install -g serve && serve -s build
   persistenceMount: /data
-  containerPort: '80'
+  containerPort: '3000'
