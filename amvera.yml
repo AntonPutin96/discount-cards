@@ -13,6 +13,6 @@ run:
   scriptName: index.js
   scriptArguments: null
   nodeArguments: null
-  command: npm install -g serve && serve -s build
+  command: npm run start:prod
   persistenceMount: /data
   containerPort: '80'
