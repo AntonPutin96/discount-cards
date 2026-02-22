@@ -17,7 +17,7 @@ const Modal = ({ children, open, onClose }: ModalProps) => (
   >
     <div className={classes.content}>
       {children}
-      <Button onClick={onClose} variant='outlined'>
+      <Button className={classes.addBtn} onClick={onClose} variant='outlined'>
         Закрыть
       </Button>
     </div>
