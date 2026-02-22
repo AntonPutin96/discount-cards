@@ -1,7 +1,7 @@
 # Конфигурация для развертывания React-приложения на Cloud.Amvera.ru
 
 meta:
-  environment: static
+  environment: node
   toolchain:
     name: npm
     version: '18'
