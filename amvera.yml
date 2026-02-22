@@ -7,73 +7,87 @@ meta:
     version: '18'
 
 build:
+  skip: false
   additionalCommands:
     - npm ci --only=production
     - npm run build
-
+  artifacts:
+    '*': /
 run:
+  scriptName: index.js
+  scriptArguments: null
+  nodeArguments: null
   command: serve -s build
-  containerPort: 8080
+  persistenceMount: /data
+  containerPort: '80'
+# build:
+#   additionalCommands:
+#     - npm ci --only=production
+#     - npm run build
 
-  # Настройки для статического хостинга
-  static:
-    directory: build
-    index: index.html
+# run:
+#   command: serve -s build
+#   containerPort: 8080
 
-  # Оптимизация переменных окружения
-  env:
-    NODE_ENV: production
-    PORT: 8080
+#   # Настройки для статического хостинга
+#   static:
+#     directory: build
+#     index: index.html
 
-  # Ограничения ресурсов
-  # resources:
-  #   cpu:
-  #     limit: 500m
-  #     request: 250m
-  #   memory:
-  #     limit: 256Mi
-  #     request: 128Mi
+#   # Оптимизация переменных окружения
+#   env:
+#     NODE_ENV: production
+#     PORT: 8080
 
-  # # Безопасность
-  # security:
-  #   readOnlyRootFilesystem: true
-  #   runAsNonRoot: true
-  #   runAsUser: 1000
-  #   capabilities:
-  #     drop:
-  #       - ALL
+# Ограничения ресурсов
+# resources:
+#   cpu:
+#     limit: 500m
+#     request: 250m
+#   memory:
+#     limit: 256Mi
+#     request: 128Mi
 
-  # # Мониторинг и логирование
-  # monitoring:
-  #   metrics:
-  #     enabled: true
-  #     port: 9090
+# # Безопасность
+# security:
+#   readOnlyRootFilesystem: true
+#   runAsNonRoot: true
+#   runAsUser: 1000
+#   capabilities:
+#     drop:
+#       - ALL
 
-  # # Логирование
-  # logging:
-  #   format: json
-  #   level: info
+# # Мониторинг и логирование
+# monitoring:
+#   metrics:
+#     enabled: true
+#     port: 9090
 
-  # # Настройки контейнера
-  # container:
-  #   image: node:18-alpine
-  #   workingDir: /app
+# # Логирование
+# logging:
+#   format: json
+#   level: info
 
-  # # Масштабирование
-  # scaling:
-  #   replicas: 1
-  #   maxReplicas: 3
-  #   minReplicas: 1
+# # Настройки контейнера
+# container:
+#   image: node:18-alpine
+#   workingDir: /app
 
-  # # Обработка зависимостей
-  # dependencies:
-  #   installCommand: npm ci --only=production
-  #   cacheDir: /app/.npm-cache
+# # Масштабирование
+# scaling:
+#   replicas: 1
+#   maxReplicas: 3
+#   minReplicas: 1
 
-  # Дополнительные настройки
-  # healthCheck:
-  #   path: /
-  #   port: 8080
-  #   interval: 30s
-  #   timeout: 5s
-  #   retries: 3
+# # Обработка зависимостей
+# dependencies:
+#   installCommand: npm ci --only=production
+#   cacheDir: /app/.npm-cache
+
+# Дополнительные настройки
+# healthCheck:
+#   path: /
+#   port: 8080
+#   interval: 30s
+#   timeout: 5s
+#   retries: 3
