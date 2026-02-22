@@ -16,10 +16,15 @@ const AppBar = () => {
   return (
     <AppBarMui position='static'>
       <Toolbar>
+        <img src='/icons/discount_32.png' alt='logo' />
         <Typography
           variant='h6'
           component='div'
-          sx={{ flexGrow: 1, cursor: 'pointer' }}
+          sx={{
+            flexGrow: 1,
+            cursor: 'pointer',
+            ml: '16px'
+          }}
           onClick={clickHandler}
         >
           Discount Cards
