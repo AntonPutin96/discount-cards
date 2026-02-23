@@ -18,7 +18,7 @@ const CardList = ({ viewFavorites = false }: CardListProps) => {
   const cards = useSelector(getAllCards(viewFavorites));
   const [openModal, setOpenModal] = useState(false);
   const activeCode = useRef<string | null>(null);
-  const activeBarCode = useRef<BcIdType>('code128');
+  const activeBarCode = useRef<BcIdType>('ean13');
   document.title = 'Скидочные карты';
   const { getCardsFromIndexedDB, getFavoritesFromIndexedDB } = useActions();
 
@@ -32,7 +32,7 @@ const CardList = ({ viewFavorites = false }: CardListProps) => {
   const cardClickHandler = (code: string, shopId: string) => {
     activeCode.current = code;
     activeBarCode.current =
-      SHOPS.find(({ id }) => id === shopId)?.code ?? 'code128';
+      SHOPS.find(({ id }) => id === shopId)?.code ?? 'ean13';
     setOpenModal(true);
   };
 

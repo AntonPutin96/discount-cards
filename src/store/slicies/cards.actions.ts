@@ -19,6 +19,10 @@ export const addCardInIndexedDB = createAsyncThunk<
   }
 >('cards/add', async ({ key, card }, { getState }) => {
   const state = getState() as RootState;
-  await set(key, [...state.cards, card]);
+  const newCard = {
+    ...card,
+    code: card.shopId === 'shop_2' ? `E${card.code}` : card.code
+  };
+  await set(key, [...state.cards, newCard]);
   return card;
 });
