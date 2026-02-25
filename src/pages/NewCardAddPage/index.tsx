@@ -5,15 +5,16 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Input from '@mui/material/Input';
-import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner';
 import classes from './newCard.module.css';
 import { LS_KEY, SHOPS } from '../../constants';
 import { useActions } from '../../hooks/useActions';
+import { BcIdType } from '../../components/BwipWrapper/types';
 
 const NewCardAddPage = () => {
   const [shopId, setShopId] = useState(SHOPS[0].id);
-  const [code, setCode] = useState('12345');
+  const [otherShopName, setOtherShopName] = useState('');
   const navigate = useNavigate();
   const { addCardInIndexedDB } = useActions();
 
@@ -22,11 +23,19 @@ const NewCardAddPage = () => {
   };
 
   const inputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setCode(e.target.value);
+    setOtherShopName(e.target.value);
   };
 
-  const addClickHandler = () => {
-    addCardInIndexedDB({ key: LS_KEY, card: { id: Date.now(), shopId, code } });
+  const handleScan = (detectedCodes: Array<IDetectedBarcode>) => {
+    console.log('detectedCodes', detectedCodes);
+    detectedCodes.forEach(({ format, rawValue }) => {
+      const barCodeType = format.replaceAll('_', '').toLowerCase() as BcIdType; // TODO: плохо, нужно написать type guard и обработку ошибки
+      const card = { id: Date.now(), shopId, code: rawValue, barCodeType };
+      addCardInIndexedDB({
+        key: LS_KEY,
+        card
+      });
+    });
     setTimeout(() => navigate('/'), 0);
   };
 
@@ -56,19 +65,20 @@ const NewCardAddPage = () => {
             </FormControl>
           </Box>
         </div>
-        <div className={classes.field}>
-          <h4>Введите код с карты:</h4>
-          <Box sx={{ m: 1, minWidth: 300 }}>
-            <FormControl fullWidth>
-              <Input value={code} onChange={inputChangeHandler} />
-            </FormControl>
-          </Box>
-        </div>
-        <div className={classes.content}>
-          <Button variant='outlined' onClick={addClickHandler}>
-            Добавить
-          </Button>
-        </div>
+        {shopId === 'shop_other' && (
+          <div className={classes.field}>
+            <h4>Введите название магазина:</h4>
+            <Box sx={{ m: 1, minWidth: 300 }}>
+              <FormControl fullWidth>
+                <Input value={otherShopName} onChange={inputChangeHandler} />
+              </FormControl>
+            </Box>
+          </div>
+        )}
+        <Scanner
+          onScan={handleScan}
+          onError={(error) => console.error(error)}
+        />
       </div>
     </div>
   );

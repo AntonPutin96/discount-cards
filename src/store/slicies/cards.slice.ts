@@ -1,18 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CardType } from '../../types';
-import { addCardInIndexedDB, getCardsFromIndexedDB } from './cards.actions';
+import {
+  addCardInIndexedDB,
+  getCardsFromIndexedDB,
+  removeCardFromIndexedDB
+} from './cards.actions';
 
 const initialState: Array<CardType> = [];
 
 const cardsSlice = createSlice({
   name: 'cards',
   initialState,
-  reducers: {
-    addCard: (state, action: PayloadAction<CardType>) => {
-      const card = action.payload;
-      state.push(card);
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(
       getCardsFromIndexedDB.fulfilled,
@@ -27,6 +26,15 @@ const cardsSlice = createSlice({
       (state, action: PayloadAction<CardType>) => {
         const card = action.payload;
         state.push(card);
+      }
+    );
+    builder.addCase(
+      removeCardFromIndexedDB.fulfilled,
+      (state: Array<CardType>, action: PayloadAction<number>) => {
+        const cardId = action.payload;
+        const filteredCards = state.filter(({ id }) => id !== cardId);
+        state.splice(0, state.length);
+        state.push(...filteredCards);
       }
     );
   }

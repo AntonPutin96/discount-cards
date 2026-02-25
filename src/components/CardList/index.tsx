@@ -7,8 +7,8 @@ import classes from './cardList.module.css';
 import { getShopNameById } from '../../logic';
 import { getAllCards } from '../../selectors/getAllCards';
 import { useActions } from '../../hooks/useActions';
-import { LS_KEY, SHOPS } from '../../constants';
-import { BcIdType } from '../BwipWrapper/types';
+import { LS_KEY } from '../../constants';
+import { CardType } from '../../types';
 
 interface CardListProps {
   viewFavorites?: boolean;
@@ -17,10 +17,13 @@ interface CardListProps {
 const CardList = ({ viewFavorites = false }: CardListProps) => {
   const cards = useSelector(getAllCards(viewFavorites));
   const [openModal, setOpenModal] = useState(false);
-  const activeCode = useRef<string | null>(null);
-  const activeBarCode = useRef<BcIdType>('ean13');
+  const activeCard = useRef<CardType | null>(null);
   document.title = 'Скидочные карты';
-  const { getCardsFromIndexedDB, getFavoritesFromIndexedDB } = useActions();
+  const {
+    getCardsFromIndexedDB,
+    getFavoritesFromIndexedDB,
+    removeCardFromIndexedDB
+  } = useActions();
 
   useEffect(() => {
     getCardsFromIndexedDB(LS_KEY);
@@ -29,11 +32,16 @@ const CardList = ({ viewFavorites = false }: CardListProps) => {
 
   const closeModalHandler = () => setOpenModal(false);
 
-  const cardClickHandler = (code: string, shopId: string) => {
-    activeCode.current = code;
-    activeBarCode.current =
-      SHOPS.find(({ id }) => id === shopId)?.code ?? 'ean13';
+  const cardClickHandler = (card: CardType) => {
+    activeCard.current = card;
     setOpenModal(true);
+  };
+
+  const removeCardHandler = () => {
+    if (activeCard.current) {
+      removeCardFromIndexedDB(activeCard.current?.id);
+      closeModalHandler();
+    }
   };
 
   if (!cards) {
@@ -43,18 +51,25 @@ const CardList = ({ viewFavorites = false }: CardListProps) => {
   return (
     <>
       <div className={classes.wrapper}>
-        {cards?.map(({ id, shopId, code }) => (
+        {cards?.map((card) => (
           <Card
-            key={`${id}`}
-            id={id}
-            title={getShopNameById(shopId)}
-            onClick={() => cardClickHandler(code, shopId)}
+            key={`${card.id}`}
+            id={card.id}
+            title={getShopNameById(card.shopId)}
+            onClick={() => cardClickHandler(card)}
           />
         ))}
       </div>
-      <Modal open={openModal} onClose={closeModalHandler}>
-        {activeCode.current ? (
-          <BwipWrapper bcId={activeBarCode.current} text={activeCode.current} />
+      <Modal
+        open={openModal}
+        onClose={closeModalHandler}
+        onRemove={removeCardHandler}
+      >
+        {activeCard.current ? (
+          <BwipWrapper
+            bcId={activeCard.current.barCodeType}
+            text={activeCard.current.code}
+          />
         ) : (
           <div>Не удалось отобразить код</div>
         )}

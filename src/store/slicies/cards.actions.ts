@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { get, set } from 'idb-keyval';
 import { CardType } from '../../types';
 import type { RootState } from '../store';
+import { LS_KEY } from '../../constants';
 
 export const getCardsFromIndexedDB = createAsyncThunk<Array<CardType>, string>(
   'cards/get',
@@ -19,10 +20,16 @@ export const addCardInIndexedDB = createAsyncThunk<
   }
 >('cards/add', async ({ key, card }, { getState }) => {
   const state = getState() as RootState;
-  const newCard = {
-    ...card,
-    code: card.shopId === 'shop_2' ? `E${card.code}` : card.code
-  };
-  await set(key, [...state.cards, newCard]);
+  await set(key, [...state.cards, card]);
   return card;
 });
+
+export const removeCardFromIndexedDB = createAsyncThunk<number, number>(
+  'cards/remove',
+  async (cardId, { getState }) => {
+    const state = getState() as RootState;
+    const filteredCards = state.cards.filter(({ id }) => id !== cardId);
+    await set(LS_KEY, filteredCards);
+    return cardId;
+  }
+);

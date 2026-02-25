@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import BwipJs from 'bwip-js';
+import BwipJs, { RenderOptions } from 'bwip-js';
 
 import { BcIdType } from './types';
 import classes from './bwipWrapper.module.css';
@@ -13,15 +13,18 @@ const BwipWrapper = ({ bcId, text }: BwipWrapperProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const svg = BwipJs.toSVG({
+    const params: RenderOptions = {
       bcid: bcId, // Barcode type
       text, // Text to encode
-      height: 12, // Bar height, in millimeters
       includetext: true, // Show human-readable text
       textxalign: 'center', // Always good to set this
       textcolor: '000', // Red text
-      scale: 1
-    });
+      scale: window.devicePixelRatio // 1
+    };
+    if (bcId !== 'qrcode') {
+      params.height = 12;
+    }
+    const svg = BwipJs.toSVG(params);
     if (ref.current) {
       ref.current.innerHTML = svg;
     }
